@@ -139,9 +139,12 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
     
-    
     void JumpOverride();
     void StopJumpingOverride();
+    
+    //Dubbel jump
+    int DubbleJumpCount;
+    virtual bool CanJumpInternal_Implementation() const override;
 
 };
 

@@ -110,15 +110,24 @@ void AProjectXCharacter::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
+bool AProjectXCharacter::CanJumpInternal_Implementation() const {
+    
+    return true;
+    
+}
+
 void AProjectXCharacter::JumpOverride(){
     
-   
+    if(GetCharacterMovement()->IsMovingOnGround())DubbleJumpCount = 0;
+    if(DubbleJumpCount > 1)return;
+    
+    DubbleJumpCount++;
+    bPressedJump = true;
     
 }
 
 void AProjectXCharacter::StopJumpingOverride(){
-    
-    
+     
     
 }
 
