@@ -5,6 +5,7 @@
 #include "ProjectXCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
+
 AProjectXGameMode::AProjectXGameMode()
 	: Super()
 {

@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -109,14 +110,35 @@ void AProjectXCharacter::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
+bool AProjectXCharacter::CanJumpInternal_Implementation() const {
+    
+    return true;
+    
+}
+
+void AProjectXCharacter::JumpOverride(){
+    
+    if(GetCharacterMovement()->IsMovingOnGround())DubbleJumpCount = 0;
+    if(DubbleJumpCount > 1)return;
+    
+    DubbleJumpCount++;
+    bPressedJump = true;
+    
+}
+
+void AProjectXCharacter::StopJumpingOverride(){
+     
+    
+}
+
 void AProjectXCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// set up gameplay key bindings
 	check(PlayerInputComponent);
 
 	// Bind jump events
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AProjectXCharacter::JumpOverride);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AProjectXCharacter::StopJumpingOverride);
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AProjectXCharacter::OnFire);
