@@ -111,9 +111,7 @@ void AProjectXCharacter::BeginPlay()
 // Input
 
 bool AProjectXCharacter::CanJumpInternal_Implementation() const {
-    
-    return true;
-    
+	return true;
 }
 
 void AProjectXCharacter::JumpOverride(){
@@ -128,7 +126,7 @@ void AProjectXCharacter::JumpOverride(){
 
 void AProjectXCharacter::StopJumpingOverride(){
      
-    
+	bPressedJump = false;
 }
 
 void AProjectXCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -138,7 +136,7 @@ void AProjectXCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AProjectXCharacter::JumpOverride);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AProjectXCharacter::StopJumpingOverride);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AProjectXCharacter::StopJumping);
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AProjectXCharacter::OnFire);
