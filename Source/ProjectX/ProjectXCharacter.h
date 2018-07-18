@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "ProjectileHandler.h"
 #include "ProjectXCharacter.generated.h"
 
 
@@ -145,6 +146,8 @@ public:
     //Dubbel jump
     int DubbleJumpCount;
     virtual bool CanJumpInternal_Implementation() const override;
+	UPROPERTY(EditAnywhere, Category = ProjectileHandler)
+		UProjectileHandler* projectileHandler;
 
 };
 
