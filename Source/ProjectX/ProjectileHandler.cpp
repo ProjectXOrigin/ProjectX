@@ -35,6 +35,11 @@ void UProjectileHandler::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 
 
+TSubclassOf<class AProjectXProjectile> UProjectileHandler::GetBullet()
+{
+	return ProjectileClass;
+}
+
 void UProjectileHandler::OnMousePressed(FRotator _controllerRotation)
 {
 	FVector Spawnlocation = GetComponentLocation();

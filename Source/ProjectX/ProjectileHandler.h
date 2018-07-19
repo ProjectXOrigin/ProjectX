@@ -28,6 +28,10 @@ public:
 	UPROPERTY(EditAnyWhere, Category = Projectile)
 	TSubclassOf<class AProjectXProjectile> ProjectileClass;
 
+
+	TSubclassOf<class AProjectXProjectile> GetBullet();
+
+
 	void OnMousePressed(FRotator _controllerRotation);
 
 	void OnMouseHold(FRotator _controllerRotation);
