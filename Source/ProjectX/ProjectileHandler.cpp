@@ -35,46 +35,52 @@ void UProjectileHandler::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 
 
+
+
 TSubclassOf<class AProjectXProjectile> UProjectileHandler::GetBullet()
 {
-	return ProjectileClass;
+	
+	return Projectiles[mBulletIndex];
+}
+
+bool UProjectileHandler::CanShoot()
+{
+	if (mShootDelayTimer > GetWorld()->TimeSeconds)
+	{
+		return false;
+	}
+	else
+	{
+		mShootDelayTimer = GetWorld()->TimeSeconds + mShootDelay;
+		return true;
+	}
 }
 
 void UProjectileHandler::OnMousePressed(FRotator _controllerRotation)
 {
-	FVector Spawnlocation = GetComponentLocation();
-	FRotator SpawnRotator = _controllerRotation;
-
-	FActorSpawnParameters ActorSpawnParams;
-
-	ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-	UWorld* const world = GetWorld();
-
-	world->SpawnActor<AProjectXProjectile>(ProjectileClass, Spawnlocation, SpawnRotator, ActorSpawnParams);
+	
 
 }
 
 void UProjectileHandler::OnMouseHold(FRotator _controllerRotation)
 {
-	FVector Spawnlocation = GetComponentLocation();
-	FRotator SpawnRotator = _controllerRotation;
-
-	FActorSpawnParameters ActorSpawnParams;
-
-	ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
 }
 
 void UProjectileHandler::OnMouseRelease(FRotator _controllerRotation)
 {
-	FVector Spawnlocation = GetComponentLocation();
-	FRotator SpawnRotator = _controllerRotation;
+}
 
-	FActorSpawnParameters ActorSpawnParams;
+void UProjectileHandler::ChangeProjectile(float _mouseScroolAxis)
+{
+	if (_mouseScroolAxis >0)
+	{
+		mBulletIndex++;
+	}
+	else if(_mouseScroolAxis < 0)
+	{
+		mBulletIndex--;
+	}
 
-	ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-
+	mBulletIndex = fmod(mBulletIndex, Projectiles.Num());
 }
 

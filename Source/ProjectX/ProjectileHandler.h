@@ -21,16 +21,24 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+private:
+
+	float mShootDelayTimer;
+	int mBulletIndex = 0;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnyWhere, Category = Projectile)
-	TSubclassOf<class AProjectXProjectile> ProjectileClass;
-
+	TArray<TSubclassOf<class AProjectXProjectile>> Projectiles;
 
 	TSubclassOf<class AProjectXProjectile> GetBullet();
 
+	UPROPERTY(EditAnywhere,Category=ProjectileTimers)
+	float mShootDelay;
+
+	bool CanShoot();
 
 	void OnMousePressed(FRotator _controllerRotation);
 
@@ -38,5 +46,6 @@ public:
 
 	void OnMouseRelease(FRotator _controllerRotation);
 	
-	
+	void ChangeProjectile(float _mouseScroolAxis);
+
 };
