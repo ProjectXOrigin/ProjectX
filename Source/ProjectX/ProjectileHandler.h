@@ -20,6 +20,8 @@ struct FBulletPool
 		int BulletPoolSize;
 		UPROPERTY(EditAnywhere)
 		TArray<TSubclassOf<AProjectXProjectile>> BulletPool;
+		UPROPERTY(EditAnyWhere)
+		bool unlocked = true;
 };
 
 
