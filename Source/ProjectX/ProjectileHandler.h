@@ -8,6 +8,22 @@
 #include "ProjectileHandler.generated.h"
 
 
+
+USTRUCT()
+struct FBulletPool
+{
+	GENERATED_USTRUCT_BODY()
+
+		UPROPERTY(EditAnyWhere)
+		TSubclassOf<AProjectXProjectile> BulletType;
+	    UPROPERTY(EditAnyWhere)
+		int BulletPoolSize;
+		UPROPERTY(EditAnywhere)
+		TArray<TSubclassOf<AProjectXProjectile>> BulletPool;
+};
+
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTX_API UProjectileHandler : public USceneComponent
 {
@@ -29,6 +45,9 @@ private:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UPROPERTY(EditAnywhere)
+		TArray<FBulletPool> Test;
 
 	UPROPERTY(EditAnyWhere, Category = Projectile)
 	TArray<TSubclassOf<class AProjectXProjectile>> Projectiles;
