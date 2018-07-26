@@ -23,7 +23,7 @@ public:
    
     UProjectileMovementComponent *bulletMovement;
     USphereComponent *bulletVisuals;
-     
+    
     
 protected:
     

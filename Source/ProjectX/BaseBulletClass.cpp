@@ -28,7 +28,7 @@ ABaseBulletClass::ABaseBulletClass()
     bulletMovement->bShouldBounce = false;
     
     InitialLifeSpan = 0.0f;
-    
+     
 }
 
 // Called when the game starts or when spawned
