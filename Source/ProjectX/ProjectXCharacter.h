@@ -148,6 +148,9 @@ public:
     virtual bool CanJumpInternal_Implementation() const override;
 	UPROPERTY(EditAnywhere, Category = ProjectileHandler)
 		UProjectileHandler* projectileHandler;
+	//this actor must be  inherit from bullethandler right now
+	UPROPERTY(EditAnywhere, Category = "BulletHandler")
+	UChildActorComponent* PistolHandler;
 
 };
 
