@@ -37,11 +37,17 @@ void APistolHandler::OnButtonPressed()
 
 void APistolHandler::OnButtonHold()
 {
+
+	UE_LOG(LogTemp,Warning,TEXT("Reached onButtonHold"))
+
 	if (UWorld* World = GetWorld())
 	{
 		float CurrentGameTime = World->GetRealTimeSeconds();
 		if (ShootTimer < CurrentGameTime)
 		{
+
+
+
 			//Set Spawn Collision Handling Override
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
@@ -50,7 +56,7 @@ void APistolHandler::OnButtonHold()
 			World->SpawnActor<AProjectXProjectile>(BulletType, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
 
 
-			ShootTimer += CurrentGameTime;
+			ShootTimer = CurrentGameTime+ShootDelay;
 		}
 	}
 }

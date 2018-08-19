@@ -119,6 +119,14 @@ void AProjectXCharacter::BeginPlay()
 	}
 }
 
+void AProjectXCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+
+	OnFireHold();
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -150,8 +158,12 @@ void AProjectXCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AProjectXCharacter::JumpOverride);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AProjectXCharacter::StopJumping);
 
+
+
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AProjectXCharacter::OnFire);
+	PlayerInputComponent->BindAction("Fire",IE_Released, this, &AProjectXCharacter::OnFireReleased);
+
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -192,9 +204,14 @@ void AProjectXCharacter::OnFire()
 
 					if (ABulletHandler* BulletHandler = Cast<ABulletHandler>(PistolHandler->GetChildActor()))
 					{
-						UE_LOG(LogTemp,Warning,TEXT("PistolRotation yaw : %f, Location : x%f y%f z%f"),BulletHandler->GetActorRotation().Yaw , BulletHandler->GetActorLocation().X, BulletHandler->GetActorLocation().Y, BulletHandler->GetActorLocation().Z)
 						BulletHandler->OnButtonPressed();
 					}
+
+
+					bHoldingFire = true;
+
+
+					HoldingFireTimer = World->GetRealTimeSeconds()+ ButtonHoldDelay;
 
 
 					//const FRotator SpawnRotation = GetControlRotation();
@@ -236,6 +253,32 @@ void AProjectXCharacter::OnFire()
 
 
 
+	
+}
+
+void AProjectXCharacter::OnFireReleased()
+{
+	bHoldingFire = false;
+}
+
+void AProjectXCharacter::OnFireHold()
+{
+	if (bHoldingFire)
+	{
+
+		if (UWorld* World = GetWorld())
+		{
+			if (HoldingFireTimer < World->GetRealTimeSeconds())
+			{
+				if (ABulletHandler* BulletHandler = Cast<ABulletHandler>(PistolHandler->GetChildActor()))
+				{
+						BulletHandler->OnButtonHold();
+				}
+			}
+			
+		}
+
+	}
 	
 }
 

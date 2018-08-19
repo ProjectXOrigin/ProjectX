@@ -53,6 +53,8 @@ public:
 protected:
 	virtual void BeginPlay();
 
+virtual void Tick(float DeltaTime) override;
+
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -87,6 +89,12 @@ protected:
 	/** Fires a projectile. */
 	void OnFire();
 
+
+	void OnFireReleased();
+
+	/*Hold the fire button*/
+	void OnFireHold();
+
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
 
@@ -95,6 +103,8 @@ protected:
 
 	/** Handles stafing movement, left and right */
 	void MoveRight(float Val);
+
+
 
 	/**
 	 * Called via input to turn at a given rate.
@@ -152,5 +162,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = "BulletHandler")
 	UChildActorComponent* PistolHandler;
 
+
+
+private:
+	bool bHoldingFire = false;
+
+	UPROPERTY(VisibleAnywhere )
+	float HoldingFireTimer = 0.0f;
+
+	//The times it takes before the game consider a button hold
+	UPROPERTY(EditAnywhere,Category="Timers" , meta = (ClampMin = "0.0"))
+	float ButtonHoldDelay = 3.f;
 };
 

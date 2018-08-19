@@ -20,15 +20,17 @@ void ABulletHandler::BeginPlay()
 
 void ABulletHandler::Shoot()
 {
+	UE_LOG(LogTemp, Warning, TEXT("you are using BaseBulletClass, you should use a class that inherits from it instead "))
 }
 
 void ABulletHandler::OnButtonPressed()
 {
-	UE_LOG(LogTemp, Warning,TEXT("shouldn't be here"))
+	UE_LOG(LogTemp, Warning, TEXT("you are using BaseBulletClass, you should use a class that inherits from it instead "))
 }
 
 void ABulletHandler::OnButtonHold()
 {
+	UE_LOG(LogTemp, Warning, TEXT("you are using BaseBulletClass, you should use a class that inherits from it instead "))
 }
 
 
