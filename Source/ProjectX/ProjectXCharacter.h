@@ -164,7 +164,7 @@ public:
 
 
 
-private:
+protected:
 	bool bHoldingFire = false;
 
 	UPROPERTY(VisibleAnywhere )
@@ -172,6 +172,30 @@ private:
 
 	//The times it takes before the game consider a button hold
 	UPROPERTY(EditAnywhere,Category="Timers" , meta = (ClampMin = "0.0"))
-	float ButtonHoldDelay = 3.f;
+	float ButtonHoldDelay = 0.5f;
+
+
+	/*
+	For Dashing
+	*/
+
+	//the direction the player will dash
+	FVector2D DashDir = FVector2D::ZeroVector;
+	//if the player should dash
+	bool bDash = false;
+	//the time the player will dash in seconds
+	UPROPERTY(EditAnywhere, Category = "Dash", meta = (ClampMin = "0.0"))
+	float DashTime =0.f;
+
+	float DashTimer = 0.f;
+	//units/second the player will move when dashing
+	UPROPERTY(EditAnywhere, Category = "Dash", meta = (ClampMin = "0.0"))
+	float DashSpeed = 0.f;
+
+	float SavedGravity;
+
+	void StartDash();
+	void Dash(float DeltaTime);
+
 };
 

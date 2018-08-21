@@ -94,6 +94,8 @@ AProjectXCharacter::AProjectXCharacter()
 	VR_MuzzleLocation->SetRelativeLocation(FVector(0.000004, 53.999992, 10.000000));
 	VR_MuzzleLocation->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));		// Counteract the rotation of the VR gun model.
 
+
+
 	// Uncomment the following line to turn motion controllers on by default:
 	//bUsingMotionControllers = true;
 }
@@ -125,6 +127,7 @@ void AProjectXCharacter::Tick(float DeltaTime)
 
 
 	OnFireHold();
+	Dash(DeltaTime);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -132,6 +135,43 @@ void AProjectXCharacter::Tick(float DeltaTime)
 
 bool AProjectXCharacter::CanJumpInternal_Implementation() const {
 	return true;
+}
+
+void AProjectXCharacter::StartDash()
+{
+	if (UWorld* World = GetWorld())
+
+	{
+		
+		DashDir = DashDir.GetSafeNormal();
+		DashTimer = World->GetRealTimeSeconds() + DashTime;
+		bDash = true;
+
+		GetCharacterMovement()->AddImpulse(GetActorForwardVector() * DashSpeed, true);
+	}
+}
+
+void AProjectXCharacter::Dash(float DeltaTime)
+{
+	if (bDash)
+	{
+		if (UWorld* World = GetWorld())
+		{
+			if (World->GetRealTimeSeconds() < DashTimer)
+			{
+
+				
+				//LaunchCharacter(GetActorForwardVector() * DashSpeed, true, true);
+			}
+			else
+			{
+				bDash = false;
+				//GetCharacterMovement()->GravityScale = SavedGravity;
+			}
+
+
+		}
+	}
 }
 
 void AProjectXCharacter::JumpOverride(){
@@ -164,6 +204,9 @@ void AProjectXCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AProjectXCharacter::OnFire);
 	PlayerInputComponent->BindAction("Fire",IE_Released, this, &AProjectXCharacter::OnFireReleased);
 
+
+	//Bind Dash event
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &AProjectXCharacter::StartDash);
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -352,19 +395,21 @@ void AProjectXCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const FVe
 
 void AProjectXCharacter::MoveForward(float Value)
 {
-	if (Value != 0.0f)
+	if (Value != 0.0f && !bDash)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorForwardVector(), Value);
+		DashDir.X = Value;
 	}
 }
 
 void AProjectXCharacter::MoveRight(float Value)
 {
-	if (Value != 0.0f)
+	if (Value != 0.0f && !bDash)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
+		DashDir.X = Value;
 	}
 }
 
