@@ -128,6 +128,8 @@ void AProjectXCharacter::Tick(float DeltaTime)
 
 	OnFireHold();
 	Dash(DeltaTime);
+	UE_LOG(LogTemp,Warning,TEXT("%s"), *DashDir.ToString())
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -145,14 +147,18 @@ void AProjectXCharacter::StartDash()
 		
 		DashDir = DashDir.GetSafeNormal();
 		DashTimer = World->GetRealTimeSeconds() + DashTime;
-		bDash = true;
+		//bDash = true;
 
-		GetCharacterMovement()->AddImpulse(GetActorForwardVector() * DashSpeed, true);
+		GetCharacterMovement()->AddImpulse(GetActorForwardVector() * DashSpeed*DashDir.X, true);
+
+		GetCharacterMovement()->AddImpulse(GetActorRightVector() * DashSpeed*DashDir.Y, true);
 	}
 }
 
 void AProjectXCharacter::Dash(float DeltaTime)
 {
+
+
 	if (bDash)
 	{
 		if (UWorld* World = GetWorld())
@@ -401,6 +407,11 @@ void AProjectXCharacter::MoveForward(float Value)
 		AddMovementInput(GetActorForwardVector(), Value);
 		DashDir.X = Value;
 	}
+	else
+	{
+		DashDir.X = 0;
+	}
+
 }
 
 void AProjectXCharacter::MoveRight(float Value)
@@ -409,8 +420,13 @@ void AProjectXCharacter::MoveRight(float Value)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
-		DashDir.X = Value;
+		DashDir.Y= Value;
 	}
+	else
+	{
+		DashDir.Y = 0;
+	}
+
 }
 
 void AProjectXCharacter::TurnAtRate(float Rate)
