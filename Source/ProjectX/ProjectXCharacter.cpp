@@ -127,8 +127,7 @@ void AProjectXCharacter::Tick(float DeltaTime)
 
 
 	OnFireHold();
-	Dash(DeltaTime);
-	UE_LOG(LogTemp,Warning,TEXT("%s"), *DashDir.ToString())
+	OnDash(DeltaTime);
 
 }
 
@@ -142,20 +141,22 @@ bool AProjectXCharacter::CanJumpInternal_Implementation() const {
 void AProjectXCharacter::StartDash()
 {
 	if (UWorld* World = GetWorld())
-
 	{
-		
-		DashDir = DashDir.GetSafeNormal();
-		DashTimer = World->GetRealTimeSeconds() + DashTime;
-		//bDash = true;
+		if (bDash == false)
+		{
+			DashDir = DashDir.GetSafeNormal();
+			DashTimer = World->GetRealTimeSeconds() + DashTime;
+			bDash = true;
 
-		GetCharacterMovement()->AddImpulse(GetActorForwardVector() * DashSpeed*DashDir.X, true);
+			GetCharacterMovement()->AddImpulse(GetActorForwardVector() * DashSpeed*DashDir.X + GetActorRightVector() * DashSpeed*DashDir.Y, true);
 
-		GetCharacterMovement()->AddImpulse(GetActorRightVector() * DashSpeed*DashDir.Y, true);
+			//GetCharacterMovement()->AddImpulse(, true);
+		}
+	
 	}
 }
 
-void AProjectXCharacter::Dash(float DeltaTime)
+void AProjectXCharacter::OnDash(float DeltaTime)
 {
 
 
@@ -163,16 +164,16 @@ void AProjectXCharacter::Dash(float DeltaTime)
 	{
 		if (UWorld* World = GetWorld())
 		{
-			if (World->GetRealTimeSeconds() < DashTimer)
-			{
+			
 
-				
-				//LaunchCharacter(GetActorForwardVector() * DashSpeed, true, true);
+			if (GetCharacterMovement()->IsMovingOnGround())
+			{
+				bDash = false;
+				UE_LOG(LogTemp,Warning,TEXT("Reset Dash"))
 			}
 			else
 			{
-				bDash = false;
-				//GetCharacterMovement()->GravityScale = SavedGravity;
+				
 			}
 
 

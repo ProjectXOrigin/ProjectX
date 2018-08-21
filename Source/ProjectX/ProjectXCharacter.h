@@ -195,7 +195,7 @@ protected:
 	float SavedGravity;
 
 	void StartDash();
-	void Dash(float DeltaTime);
+	void OnDash(float DeltaTime);
 
 };
 
