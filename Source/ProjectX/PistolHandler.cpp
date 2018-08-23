@@ -25,12 +25,12 @@ void APistolHandler::OnButtonPressed()
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 			
-			UE_LOG(LogTemp, Warning, TEXT("spawnBullet"))
+			
 
-			World->SpawnActor<AProjectXProjectile>(BulletType, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
+			World->SpawnActor<ABaseBulletClass>(BulletType, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
 
 
-			ShootTimer = ShootDelay+ CurrentGameTime;
+			ShootTimer = ShootDelay + CurrentGameTime;
 		}
 	}
 }
@@ -53,7 +53,7 @@ void APistolHandler::OnButtonHold()
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 
-			World->SpawnActor<AProjectXProjectile>(BulletType, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
+			//World->SpawnActor<ABaseBulletClass>(BulletType, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
 
 
 			ShootTimer = CurrentGameTime+ShootDelay;

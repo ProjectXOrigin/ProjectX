@@ -6,7 +6,6 @@
 ABaseBulletClass::ABaseBulletClass()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
     
     bulletVisuals = CreateDefaultSubobject<USphereComponent>(TEXT("BulletSphere"));
     bulletVisuals -> InitSphereRadius(30.0f);
@@ -21,12 +20,15 @@ ABaseBulletClass::ABaseBulletClass()
     //Init the bullet movement here
     bulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
     bulletMovement->UpdatedComponent = bulletVisuals;
-    bulletMovement->InitialSpeed = 1000.f;
+    
+    bulletMovement->InitialSpeed = 10000.f;
     
     bulletMovement->MaxSpeed = 0.0f;
     bulletMovement->bRotationFollowsVelocity = true;
     bulletMovement->bShouldBounce = false;
+    bulletMovement->ProjectileGravityScale = 0;
     
+     UE_LOG(LogTemp, Warning, TEXT("hitt"))
     InitialLifeSpan = 0.0f;
      
 }
@@ -38,17 +40,16 @@ void ABaseBulletClass::BeginPlay()
 	
 }
 
-// Called every frame
-void ABaseBulletClass::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 //Init on hit function
 void ABaseBulletClass::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit){
-    
-    
+   
+    // Only add impulse and destroy projectile if we hit a physics
+    if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+    {
+        OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+        
+        Destroy();
+    }
     
 }
 

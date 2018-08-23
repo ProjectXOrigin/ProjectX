@@ -243,6 +243,8 @@ void AProjectXCharacter::OnFire()
 			UWorld* const World = GetWorld();
 			if (World != NULL)
 			{
+                
+            
 				if (bUsingMotionControllers)
 				{
 					const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();

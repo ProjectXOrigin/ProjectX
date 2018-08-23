@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BaseBulletClass.h"
 #include "BulletHandler.generated.h"
 
 class AProjectXProjectile;
@@ -32,7 +33,7 @@ protected:
 
 
 	UPROPERTY(EditAnyWhere, Category = "BulletHandler")
-	TSubclassOf<AProjectXProjectile>  BulletType;
+	TSubclassOf<ABaseBulletClass>  BulletType;
 
 
 public:	
