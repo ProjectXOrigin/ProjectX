@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "BulletHandler.h"
 
 
@@ -34,4 +35,52 @@ void ABulletHandler::OnButtonHold()
 }
 
 
+//Adds bullets to the world and pool
+void ABulletHandler::InitBulletsCount(int count)
+{
+    for (int i = 0; i < count; i ++) AddBullet();
+}
 
+ABaseBulletClass *ABulletHandler::AddBullet(){
+    
+    if(UWorld *World = GetWorld()){
+    
+        //Set Spawn Collision Handling Override
+        FActorSpawnParameters ActorSpawnParams;
+        ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+        
+        ABaseBulletClass *bullet = World->SpawnActor<ABaseBulletClass>(BulletType, GetActorLocation(), FRotator::ZeroRotator, ActorSpawnParams);
+        bulletPool.Add(bullet);
+        
+        return bullet;
+        
+    }; return nullptr;
+    
+}
+
+//Use this funtion to get a bullet from the world
+ABaseBulletClass *ABulletHandler::GetBullet(){
+    
+    for (int i = 0; i < bulletPool.Num(); i ++) {
+        if(bulletPool[i]->inUse == false)return bulletPool[i];
+    }; return nullptr;
+    
+}
+
+void ABulletHandler::FireBullet(FRotator rotation)
+{
+        
+    //Get bullet from pool
+    if(ABaseBulletClass *getBullet = GetBullet()){
+        
+        //Reset bullet and activate it here
+        getBullet->Start(GetActorLocation(),rotation);
+        
+    }else if(ABaseBulletClass *addBullet = AddBullet()){
+        
+        //Adding bullet object to our bullet pool
+        addBullet->Start(GetActorLocation(),rotation);
+        
+    }
+    
+}

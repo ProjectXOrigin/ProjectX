@@ -2,12 +2,16 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "BaseBulletClass.h"
 #include "BulletHandler.generated.h"
 
 class AProjectXProjectile;
+
+
 
 UCLASS()
 class PROJECTX_API ABulletHandler : public AActor
@@ -19,9 +23,13 @@ public:
 	ABulletHandler();
 
 protected:
+    
+    ABaseBulletClass *GetBullet();
+    ABaseBulletClass *AddBullet();
+    TArray<ABaseBulletClass*> bulletPool;
+    
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 
     UFUNCTION(Category = "BulletHandler")
 	virtual void Shoot();
@@ -30,8 +38,6 @@ protected:
 	float ShootDelay;
 	float ShootTimer =0.f;
 
-
-
 	UPROPERTY(EditAnyWhere, Category = "BulletHandler")
 	TSubclassOf<ABaseBulletClass>  BulletType;
 
@@ -39,8 +45,10 @@ protected:
 public:	
 
 	virtual void OnButtonPressed();
-
 	virtual void OnButtonHold();
+    
+    virtual void InitBulletsCount(int count);
+    virtual void FireBullet(FRotator rotation);
 	
 	
 };

@@ -21,6 +21,7 @@ public:
     //Speed of the bullet
     float Speed;
    
+    UPROPERTY(EditAnywhere,BlueprintReadWrite)
     UProjectileMovementComponent *bulletMovement;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -31,10 +32,15 @@ protected:
     
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+    void GenerateProjectileMovment();
 
 public:
     
+    bool inUse;
+    void Disable();
+    void Start(FVector location, FRotator rotator);
     
-    void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit); 
+    UFUNCTION()
+    void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 	
 };

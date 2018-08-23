@@ -204,9 +204,7 @@ void AProjectXCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AProjectXCharacter::JumpOverride);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AProjectXCharacter::StopJumping);
-
-
-
+  
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AProjectXCharacter::OnFire);
 	PlayerInputComponent->BindAction("Fire",IE_Released, this, &AProjectXCharacter::OnFireReleased);

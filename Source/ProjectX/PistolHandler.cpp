@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PistolHandler.h"
-#include "Engine/World.h"
-#include "ProjectXProjectile.h"
 
 // Called when the game starts or when spawned
 void APistolHandler::BeginPlay()
 {
 	Super::BeginPlay();
+    
+    //Initelize bullet pool with count of 10
+    InitBulletsCount(10);
 
 }
 
@@ -21,14 +22,9 @@ void APistolHandler::OnButtonPressed()
 		float CurrentGameTime = World->GetRealTimeSeconds();
 		if (ShootTimer < CurrentGameTime)
 		{
-			//Set Spawn Collision Handling Override
-			FActorSpawnParameters ActorSpawnParams;
-			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 			
-			
-
-			World->SpawnActor<ABaseBulletClass>(BulletType, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
-
+			//Here we fire a bullet from the pool
+            FireBullet(GetActorRotation());
 
 			ShootTimer = ShootDelay + CurrentGameTime;
 		}
@@ -45,17 +41,10 @@ void APistolHandler::OnButtonHold()
 		float CurrentGameTime = World->GetRealTimeSeconds();
 		if (ShootTimer < CurrentGameTime)
 		{
-
-
-
-			//Set Spawn Collision Handling Override
-			FActorSpawnParameters ActorSpawnParams;
-			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-
-			//World->SpawnActor<ABaseBulletClass>(BulletType, GetActorLocation(), GetActorRotation(), ActorSpawnParams);
-
-
+   
+            //Here we fire a bullet from the pool
+            FireBullet(GetActorRotation());
+            
 			ShootTimer = CurrentGameTime+ShootDelay;
 		}
 	}

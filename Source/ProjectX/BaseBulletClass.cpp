@@ -6,9 +6,10 @@
 ABaseBulletClass::ABaseBulletClass()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = false;
     
     bulletVisuals = CreateDefaultSubobject<USphereComponent>(TEXT("BulletSphere"));
-    bulletVisuals -> InitSphereRadius(30.0f);
+    bulletVisuals -> InitSphereRadius(12.0f);
     bulletVisuals -> BodyInstance.SetCollisionProfileName("Projectile");
     bulletVisuals -> OnComponentHit.AddDynamic(this, &ABaseBulletClass::OnHit);
     
@@ -19,37 +20,81 @@ ABaseBulletClass::ABaseBulletClass()
     
     //Init the bullet movement here
     bulletMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
-    bulletMovement->UpdatedComponent = bulletVisuals;
     
     bulletMovement->InitialSpeed = 10000.f;
     
     bulletMovement->MaxSpeed = 0.0f;
     bulletMovement->bRotationFollowsVelocity = true;
     bulletMovement->bShouldBounce = false;
+    
+    //Set the gravity to zero
     bulletMovement->ProjectileGravityScale = 0;
     
-     UE_LOG(LogTemp, Warning, TEXT("hitt"))
+    //Deactivate tick here for pool
+    bulletMovement->Deactivate();
+    bulletMovement->SetComponentTickEnabled(false);
+    SetActorHiddenInGame(true);
+    
+    //The bullet is not in use when initelized
+    inUse = false;
+    
+    //Initial life span of the bullet base class
     InitialLifeSpan = 0.0f;
-     
+    
 }
 
 // Called when the game starts or when spawned
 void ABaseBulletClass::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 //Init on hit function
-void ABaseBulletClass::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit){
-   
-    // Only add impulse and destroy projectile if we hit a physics
-    if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+void ABaseBulletClass::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+    
+    if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
     {
-        OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-        
-        Destroy();
+        OtherComponent->AddImpulseAtLocation(bulletMovement->Velocity * 100.0f, Hit.ImpactPoint);
     }
+    
+    //Disable actor
+    Disable();
+}
+
+void ABaseBulletClass::Disable()
+{
+    // Hides visible components
+    SetActorHiddenInGame(true);
+    inUse = false;
     
 }
 
+//This function resets the actors projectile to the instace orgin
+void ABaseBulletClass::Start(FVector location, FRotator rotator)
+{
+    
+    //Set location for bullet and rotation here
+    SetActorLocation(location);
+    SetActorRotation(rotator);
+    
+    //Calculate velocity
+    bulletMovement->UpdatedComponent = RootComponent;
+    bulletMovement->Velocity = FVector(1.f,0.f,0.f);
+    
+    if (bulletMovement->Velocity.SizeSquared() > 0.f)
+    {
+        // InitialSpeed > 0 overrides initial velocity magnitude.
+        if (bulletMovement->InitialSpeed > 0.f)bulletMovement->Velocity = bulletMovement->Velocity.GetSafeNormal() * bulletMovement->InitialSpeed;
+        if (bulletMovement->bInitialVelocityInLocalSpace) bulletMovement->SetVelocityInLocalSpace(bulletMovement->Velocity);
+        
+    }
+    
+    bulletMovement->Activate();
+    bulletMovement->SetComponentTickEnabled(true);
+    
+    // Hides visible components
+    SetActorHiddenInGame(false);
+    inUse = true;
+    
+}
