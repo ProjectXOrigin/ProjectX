@@ -33,7 +33,7 @@ ABaseBulletClass::ABaseBulletClass()
     //Deactivate tick here for pool
     bulletMovement->Deactivate();
     bulletMovement->SetComponentTickEnabled(false);
-    //SetActorHiddenInGame(true);
+    SetActorHiddenInGame(true);
     
     //The bullet is not in use when initelized
     inUse = false;
