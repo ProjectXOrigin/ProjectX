@@ -21,11 +21,9 @@ void APistolHandler::OnButtonPressed()
 		UE_LOG(LogTemp, Warning, TEXT("Found World"))
 		float CurrentGameTime = World->GetRealTimeSeconds();
 		if (ShootTimer < CurrentGameTime)
-		{
-			
+		{ 
 			//Here we fire a bullet from the pool
             FireBullet(GetActorRotation());
-
 			ShootTimer = ShootDelay + CurrentGameTime;
 		}
 	}
@@ -41,10 +39,8 @@ void APistolHandler::OnButtonHold()
 		float CurrentGameTime = World->GetRealTimeSeconds();
 		if (ShootTimer < CurrentGameTime)
 		{
-   
             //Here we fire a bullet from the pool
             FireBullet(GetActorRotation());
-            
 			ShootTimer = CurrentGameTime+ShootDelay;
 		}
 	}

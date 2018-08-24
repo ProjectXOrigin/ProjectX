@@ -34,6 +34,9 @@ void ABulletHandler::OnButtonHold()
 	UE_LOG(LogTemp, Warning, TEXT("you are using BaseBulletClass, you should use a class that inherits from it instead "))
 }
 
+////////////////////////
+//Bullet pool logic here
+////////////////////////
 
 //Adds bullets to the world and pool
 void ABulletHandler::InitBulletsCount(int count)
@@ -54,7 +57,7 @@ ABaseBulletClass *ABulletHandler::AddBullet(){
         
         return bullet;
         
-    }; return nullptr;
+    };  return nullptr;
     
 }
 

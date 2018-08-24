@@ -50,6 +50,10 @@ void ABaseBulletClass::BeginPlay()
 	Super::BeginPlay();
 }
 
+///////////////////////
+//BaseBullet logic here
+///////////////////////
+
 //Init on hit function
 void ABaseBulletClass::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
