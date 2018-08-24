@@ -40,6 +40,7 @@ ABaseBulletClass::ABaseBulletClass()
     
     //Initial life span of the bullet base class
     InitialLifeSpan = 0.0f;
+    Lifetime = 3.0f;
     
 }
 
@@ -64,6 +65,11 @@ void ABaseBulletClass::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAct
 
 void ABaseBulletClass::Disable()
 {
+    
+    //Clear timer here
+    GetWorld()->GetTimerManager().ClearTimer(TimerHandle); 
+    TimerDel = nullptr;
+    
     // Hides visible components
     SetActorHiddenInGame(true);
     inUse = false;
@@ -92,6 +98,10 @@ void ABaseBulletClass::Start(FVector location, FRotator rotator)
     
     bulletMovement->Activate();
     bulletMovement->SetComponentTickEnabled(true);
+    
+    //Setup deactive timer//Timer for deactivating bullet
+    TimerDel.BindUFunction(this, FName("Disable"));
+    GetWorldTimerManager().SetTimer(TimerHandle,TimerDel, Lifetime, false);
     
     // Hides visible components
     SetActorHiddenInGame(false);

@@ -30,15 +30,24 @@ public:
     
 protected:
     
+    //Timer
+    FTimerDelegate TimerDel;
+    FTimerHandle TimerHandle;
+    
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
     void GenerateProjectileMovment();
 
 public:
     
+    UPROPERTY(EditAnywhere,BlueprintReadWrite)
+    float Lifetime;
+    
     bool inUse;
-    void Disable();
     void Start(FVector location, FRotator rotator);
+    
+    UFUNCTION()
+    void Disable();
     
     UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
