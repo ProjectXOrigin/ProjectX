@@ -12,9 +12,15 @@
 UCLASS()
 class PROJECTX_API AShootgunHandler : public ABulletHandler
 {
-	GENERATED_BODY()
 	
-	
+    GENERATED_BODY()
+public:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+    
+public:
+    virtual void OnButtonPressed() override;
+    virtual void OnButtonHold() override; 
 	
 	
 };
